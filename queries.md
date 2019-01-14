@@ -65,27 +65,47 @@ where CustomerName='Rattlesnake Canyon Grocery'
 ```
 
 ## list customers names and the number of orders per customer. Sort the list by number of orders in descending order. _Ernst Handel_ should be at the top with 10 orders followed by _QUICK-Stop_, _Rattlesnake Canyon Grocery_ and _Wartian Herkku_ with 7 orders each.
+with Ernst Handel at the top:
 ```
-<!-- SELECT Customers.CustomerName, count(Orders.CustomerID) as orders
+SELECT Customers.CustomerName, count(Orders.CustomerID) as orders
 FROM Orders
 INNER JOIN Customers
 ON Orders.CustomerID=Customers.CustomerID
-where CustomerName in ('Ernst Handel', 'QUICK-Stop', 'Rattlesnake Canyon Grocery', 'Wartian Herkku')
-order by CustomerName -->
-???
+group by Customers.CustomerName
+having CustomerName in ('Ernst Handel', 'QUICK-Stop', 'Rattlesnake Canyon Grocery', 'Wartian Herkku')
+order by CustomerName
+```
+
+sorted in descending order:
+```
+SELECT Customers.CustomerName, count(Orders.CustomerID) as orders
+FROM Orders
+INNER JOIN Customers
+ON Orders.CustomerID=Customers.CustomerID
+group by Customers.CustomerName
+having CustomerName in ('Ernst Handel', 'QUICK-Stop', 'Rattlesnake Canyon Grocery', 'Wartian Herkku')
+order by CustomerName desc
 ```
 
 ## list orders grouped by customer's city showing number of orders per city. Returns 58 Records with _Aachen_ showing 2 orders and _Albuquerque_ showing 7 orders.
 ```
-<!-- SELECT Customers.City, count(Orders.CustomerID) as orders
+SELECT Customers.City, count(Orders.CustomerID) as orders
 FROM Orders
 INNER JOIN Customers
 ON Orders.CustomerID=Customers.CustomerID
-where city = 'Aachen' or city = 'Albuquerque' -->
-???
+group by Customers.City
+```
+
+## Select all customer that have no orders. Should delete 17 (or 18 if you haven't deleted the record added) records.
+```
+select *
+from Customers as c
+left join Orders as o on c.CustomerID = o.CustomerID
+where o.CustomerID is null;
 ```
 
 ## delete all users that have no orders. Should delete 17 (or 18 if you haven't deleted the record added) records.
 ```
-???
+delete from Customers as c
+where c.CustomerID not in (SELECT distinct customerID FROM Orders)
 ```
